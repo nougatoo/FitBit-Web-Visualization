@@ -1,0 +1,134 @@
+.bar {
+  fill: #4292c6;
+/*stroke: black; */
+}
+
+.bar:hover {
+  fill: #2171b5 ;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  width: 10%;
+}
+
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+body {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+}
+
+.day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.day:hover {
+	cursor: pointer;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+  opacity: 1;
+}
+
+
+
+.rect:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.buttonsStuff select{
+	background-color: #4292c6;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+	float: left;
+	  cursor: pointer;
+
+}
+
+.button {
+	background-color: #4292c6;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+	float: left;
+	  cursor: pointer;
+	
+}
+
+.button:hover {
+	background-color: #2171b5
+}
+
+.buttonsStuff select:hover {
+    background-color: #2171b5
+}
+
+.button:active {
+    background-color: #08519c
+}
+
+
+div {
+       margin: auto;
+    width: 60%;
+}
+
+
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+.RdYlGn .q0-11{fill:rgb(198,219,239)}
+.RdYlGn .q1-11{fill:rgb(158,202,225)}
+.RdYlGn .q2-11{fill:rgb(107,174,214)}
+.RdYlGn .q3-11{fill:rgb(49,130,189)}
+.RdYlGn .q4-11{fill:rgb(8,81,156)}
