@@ -1,32 +1,32 @@
+/****************************************
+Name: Brandon Brien
+ID: 10079883
+
+TODO: 
+	- Legened for main grid (white = no data available)
+	- Count for each color. (could be month, week, year...not sure yet)
+	- Reorganize code
+
+
+
+*****************************************/
+
+
+
+
+
 var xScale = d3.scale.linear().range([0, width]);
 var yScale = d3.scale.linear().range([height, 0]);
 
-
-
 var barChartSetup = false;
 var svg2;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 var width = 960,
     height = 150,
     cellSize = 17, // cell size
     week_days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
     month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-	para_choices = ['Calories Burned', 'Steps', 'Distance', 'Floors', 'Minutes Sedentary', 'Minutes Lightly Active', 'Minutes Fairly Acttive'
+	para_choices = ['Calories Burned', 'Steps', 'Distance', 'Floors', 'Minutes Sedentary', 'Minutes Lightly Active', 'Minutes Fairly Active'
 					, 'Minutes Very Active', 'Activity Calories', 'Minutes Asleep', 'Minutes Awake', 'Number of Awakenings', 'Time in Bed'],
 	maxValuesBar = [7000, 31000, 17, 200, 1500, 800, 220, 250, 6500, 680, 250, 50, 1000],
 	color = null,
@@ -328,9 +328,9 @@ function loadBarChart()
 	d3.select("#BARCHART").remove();
 	//console.log(barChartDate);
 	
-var margin = {top: 20, right: 20, bottom: 30, left: 70},
-    width = 900 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var margin = {top: 150, right: 20, bottom: 30, left: 70},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 //var x = d3.scale.ordinal()
   //  .rangeRoundBands([0, width], .1);
@@ -353,7 +353,7 @@ var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return "<strong>" + para_choices[barChartIndex] + ": " + "</strong> <style='color:red'>" + d[para_choices[barChartIndex]].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span>";
+    return "<style='color:red'><center>" + d[para_choices[barChartIndex]].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</center></span>";
   })	
 
 svg2 = d3.select("body").append("svg")
@@ -502,6 +502,33 @@ d3.csv("All_data.csv", function(error, csv) {
 
 	x.domain(dataT.map(function(d) { return d["Name"]}));
 	y.domain([0, d3.max(dataT, function(d) { return maxValuesBar[barChartIndex]})]); //CHANGE
+	
+	
+	svg2.append("rect")
+		.attr("x", (width /2)-150)
+		.attr("y", -80)
+		.attr("width", 300)
+		.attr("height", 50)
+		.style("fill", "#4292c6");
+		
+		
+	svg2.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", -60)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px")
+		.style("fill", "white")
+        .text(para_choices[barChartIndex]);
+		
+	svg2.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", -40)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "12px")
+		.style("fill", "white")
+        .text(barChartDate);
+	
+
 	svg2.append("g")
 		.attr("class", "yAxis")
 		.call(yAxis)
@@ -510,16 +537,17 @@ d3.csv("All_data.csv", function(error, csv) {
 			.attr("transform", "rotate(-90)")
 			.attr("y", 6)
 			.attr("dy", "0.71em")
-			.style("text-anchor", "end");
+			.style("text-anchor", "end")
 			
 	svg2.append("g")
 		.attr("class", "xAxis")
 		.attr("transform", "translate(0," + height + ")")
 		.call(xAxis)
-	.append("text")
-		.attr("y", 30)
-		.style("text-anchor", "middle")
-		.text("User");
+		.append("text")
+			.attr("y", 30)
+			.attr("x", width/2)
+			.style("text-anchor", "middle")
+			.text("User");
 		
 	svg2.selectAll(".bar")
 		.data(dataT)
