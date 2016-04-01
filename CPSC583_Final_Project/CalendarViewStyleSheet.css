@@ -92,6 +92,7 @@ body {
 
 }
 
+
 .button {
 	background-color: #4292c6;
     border: none;
@@ -126,10 +127,91 @@ div {
 
 
 
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
-.RdYlGn .q0-11{fill:rgb(198,219,239)}
-.RdYlGn .q1-11{fill:rgb(158,202,225)}
-.RdYlGn .q2-11{fill:rgb(107,174,214)}
-.RdYlGn .q3-11{fill:rgb(49,130,189)}
-.RdYlGn .q4-11{fill:rgb(8,81,156)}
+
+.RdYlGn .q0-0{fill:#c6dbef}
+.RdYlGn .q1-0{fill:#9ecae1}
+.RdYlGn .q2-0{fill:#6baed6}
+.RdYlGn .q3-0{fill:#3182bd}
+.RdYlGn .q4-0{fill:#08519c}
+
+.RdYlGn .q0-1{fill:#edf8e9}
+.RdYlGn .q1-1{fill:#bae4b3}
+.RdYlGn .q2-1{fill:#74c476}
+.RdYlGn .q3-1{fill:#31a354}
+.RdYlGn .q4-1{fill:#006d2c}
+
+.RdYlGn .q0-2{fill:#edf8e9}
+.RdYlGn .q1-2{fill:#bae4b3}
+.RdYlGn .q2-2{fill:#74c476}
+.RdYlGn .q3-2{fill:#31a354}
+.RdYlGn .q4-2{fill:#006d2c}
+
+.RdYlGn .q0-3{fill:#feedde}
+.RdYlGn .q1-3{fill:#fdbe85}
+.RdYlGn .q2-3{fill:#fd8d3c}
+.RdYlGn .q3-3{fill:#e6550d}
+.RdYlGn .q4-3{fill:#a63603}
+
+.RdYlGn .q6-4{fill:#dadaeb}
+.RdYlGn .q5-4{fill:#bcbddc}
+.RdYlGn .q4-4{fill:#9e9ac8}
+.RdYlGn .q3-4{fill:#807dba}
+.RdYlGn .q2-4{fill:#6a51a3}
+.RdYlGn .q1-4{fill:#54278f}
+.RdYlGn .q0-4{fill:#3f007d}
+
+.RdYlGn .q0-5{fill:#dadaeb}
+.RdYlGn .q1-5{fill:#bcbddc}
+.RdYlGn .q2-5{fill:#9e9ac8}
+.RdYlGn .q3-5{fill:#807dba}
+.RdYlGn .q4-5{fill:#6a51a3}
+.RdYlGn .q5-5{fill:#54278f}
+.RdYlGn .q6-5{fill:#3f007d}
+
+.RdYlGn .q0-6{fill:#dadaeb}
+.RdYlGn .q1-6{fill:#bcbddc}
+.RdYlGn .q2-6{fill:#9e9ac8}
+.RdYlGn .q3-6{fill:#807dba}
+.RdYlGn .q4-6{fill:#6a51a3}
+.RdYlGn .q5-6{fill:#54278f}
+.RdYlGn .q6-6{fill:#3f007d}
+
+.RdYlGn .q0-7{fill:#dadaeb}
+.RdYlGn .q1-7{fill:#bcbddc}
+.RdYlGn .q2-7{fill:#9e9ac8}
+.RdYlGn .q3-7{fill:#807dba}
+.RdYlGn .q4-7{fill:#6a51a3}
+.RdYlGn .q5-7{fill:#54278f}
+.RdYlGn .q6-7{fill:#3f007d}
+
+.RdYlGn .q0-8{fill:#fee5d9}
+.RdYlGn .q1-8{fill:#fcae91}
+.RdYlGn .q2-8{fill:#fb6a4a}
+.RdYlGn .q3-8{fill:#de2d26}
+.RdYlGn .q4-8{fill:#a50f15}
+
+.RdYlGn .q0-9{fill:#f1eef6}
+.RdYlGn .q1-9{fill:#d7b5d8}
+.RdYlGn .q2-9{fill:#df65b0}
+.RdYlGn .q3-9{fill:#dd1c77}
+.RdYlGn .q4-9{fill:#980043}
+
+.RdYlGn .q0-10{fill:#ccece6}
+.RdYlGn .q1-10{fill:#99d8c9}
+.RdYlGn .q2-10{fill:#66c2a4}
+.RdYlGn .q3-10{fill:#2ca25f}
+.RdYlGn .q4-10{fill:#006d2c}
+
+.RdYlGn .q4-11{fill:#252525}
+.RdYlGn .q3-11{fill:#636363}
+.RdYlGn .q2-11{fill:#969696}
+.RdYlGn .q1-11{fill:#cccccc}
+.RdYlGn .q0-11{fill:#d9d9d9}
+
+.RdYlGn .q4-12{fill:#252525}
+.RdYlGn .q3-12{fill:#636363}
+.RdYlGn .q2-12{fill:#969696}
+.RdYlGn .q1-12{fill:#cccccc}
+.RdYlGn .q0-12{fill:#d9d9d9}
+

@@ -28,6 +28,7 @@ var width = 960,
     month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 	para_choices = ['Calories Burned', 'Steps', 'Distance', 'Floors', 'Minutes Sedentary', 'Minutes Lightly Active', 'Minutes Fairly Active'
 					, 'Minutes Very Active', 'Activity Calories', 'Minutes Asleep', 'Minutes Awake', 'Number of Awakenings', 'Time in Bed'],
+	color_choices = ["#4292c6", "#74c476", "#74c476", "#fd8d3c", "#bcbddc", "#9e9ac8", "#807dba", "#6a51a3", "#de2d26", "#df65b0", "#66c2a4", "#969696", "#969696"],
 	maxValuesBar = [7000, 31000, 17, 200, 1500, 800, 220, 250, 6500, 680, 250, 50, 1000],
 	color = null,
 	barChartIndex = 0,
@@ -46,12 +47,24 @@ change_color_domain(4143);
 // Changes the color-scale domain when the parameter changes	
 function change_color_domain(new_max)
 {
+
+	var r_ange =5;
+	
+	//Special range for active minutes selection
+	if(barChartIndex == 4 || barChartIndex == 5 || barChartIndex == 6  || barChartIndex == 7)
+	{
+		var r_ange = 7;
+	}
 	color = d3.scale.quantize()
 		//.domain([-.05, .05])
 		.domain([0, new_max])
-		.range(d3.range(5).map(function(d) { return "q" + d + "-11"; }));
-	
+		.range(d3.range(r_ange).map(function(d) { 
+			return "q" + d + "-" + parameter_choice; 
+		}
+		));
 }
+
+
 
 // Sets up the body 
 var svg = d3.select("body").selectAll("svg")
@@ -261,6 +274,8 @@ function createButtons() {
 	var buttonsData = [
 		{name:"", target: "paras"},
 	];
+	
+	var color_index = 0;
 
 	var buttonGroups = d3.select("#buttons").selectAll(".buttonGroup")
 		.data(buttonsData).enter()
@@ -276,12 +291,17 @@ function createButtons() {
 				xAxisIndex = selectedIndex;
 			}
 			barChartIndex = selectedIndex;
+			parameter_choice = selectedIndex;
 			update_vis_data(selectedIndex);
 		})
 		.selectAll("option")
 			.data(para_choices).enter()
 			.append("option")
-			.text(function(d) { return d; });
+			.text(function(d) { return d; })
+			.style("background-color",  function() {
+			
+				return color_choices[color_index++];
+			});
 }
 
 
