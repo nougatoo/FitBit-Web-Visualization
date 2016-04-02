@@ -11,10 +11,6 @@ TODO:
 
 *****************************************/
 
-
-
-
-
 var xScale = d3.scale.linear().range([0, width]);
 var yScale = d3.scale.linear().range([height, 0]);
 
@@ -29,6 +25,11 @@ var width = 960,
 	para_choices = ['Calories Burned', 'Steps', 'Distance', 'Floors', 'Minutes Sedentary', 'Minutes Lightly Active', 'Minutes Fairly Active'
 					, 'Minutes Very Active', 'Activity Calories', 'Minutes Asleep', 'Minutes Awake', 'Number of Awakenings', 'Time in Bed'],
 	color_choices = ["#4292c6", "#74c476", "#74c476", "#fd8d3c", "#bcbddc", "#9e9ac8", "#807dba", "#6a51a3", "#de2d26", "#df65b0", "#66c2a4", "#969696", "#969696"],
+	vetoNames = [],
+	checkBox_ids = ["user1_box", "user2_box", "user3_box", "user4_box", "user5_box", "user6_box", "user7_box", "user8_box", "user9_box", 
+					"user10_box", "user11_box", "user12_box", "user13_box", "user14_box", "user15_box", "user16_box", "user17_box", "user18_box", "user19_box", "user20_box"],
+	usernames = ["User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12", "User 13", "User 14", "User 15", 
+				"User 16", "User 17", "User 18", "User 19", "User 20"]
 	maxValuesBar = [7000, 31000, 17, 200, 1500, 800, 220, 250, 6500, 680, 250, 50, 1000],
 	color = null,
 	barChartIndex = 0,
@@ -48,20 +49,32 @@ change_color_domain(4143);
 function change_color_domain(new_max)
 {
 
+	
 	var r_ange =5;
 	
 	//Special range for active minutes selection
 	if(barChartIndex == 4 || barChartIndex == 5 || barChartIndex == 6  || barChartIndex == 7)
 	{
-		var r_ange = 7;
+		r_ange = 7;
 	}
 	color = d3.scale.quantize()
 		//.domain([-.05, .05])
 		.domain([0, new_max])
 		.range(d3.range(r_ange).map(function(d) { 
-			return "q" + d + "-" + parameter_choice; 
+		
+			
+			var temp = parameter_choice;
+			if (parameter_choice === 0)
+			{
+				temp = 13;
+			}
+			return "q" + d + "-" + temp; 
 		}
 		));
+		
+	;
+		
+	
 }
 
 
@@ -73,6 +86,8 @@ var svg = d3.select("body").selectAll("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("class", "RdYlGn")
+	.style("display", "block")
+	.style("margin", "auto")
   .append("g")
     .attr("transform", "translate(" + ((width - cellSize * 50) / 2) + "," + (height - cellSize * 7 - 1) + ")");
 
@@ -115,6 +130,7 @@ svg.selectAll(".month")
 
 // Create buttons and choics menus
 createButtons();
+build_user_menu();
 	
 // Initally start with the first option on the menu (calories burned) 
 update_vis_data(0);
@@ -124,6 +140,24 @@ function update_vis_data (to_show) {
 d3.csv("All_data.csv", function(error, csv) {
   if (error) throw error;
 	//console.log(csv);
+	
+	//Filters the non-checked names from csv
+	
+	//console.log(vetoNames);
+	for(i=0;i<csv.length;i++)
+	{
+		for(j=0;j<vetoNames.length;j++)
+		{
+			if(csv[i]["Name"] === vetoNames[j])
+			{
+				csv.splice(i,1);
+				i--;
+				break;
+			}
+		}
+		
+	}
+	
   var data = d3.nest()
     .key(function(d) {return d.Date; })
 	.key(function(d) {
@@ -203,9 +237,9 @@ d3.csv("All_data.csv", function(error, csv) {
 		}
 		data[key] = Math.round((total/Object.keys(data[key]).length)*100)/100;
 	}
-	//console.log(data);
-	rect.filter(function(d) { return d in data; })
-  		.transition()
+
+
+  	rect.transition()
 		.duration(0)
 		.delay(function(d, i) {
 			if (true) {
@@ -215,8 +249,7 @@ d3.csv("All_data.csv", function(error, csv) {
 			};
 		}) 
 		.attr("class", function(d) { 
-	  
-
+		
 		return "day " + color(data[d]); 
 	  
 	  
@@ -277,8 +310,9 @@ function createButtons() {
 	
 	var color_index = 0;
 
-	var buttonGroups = d3.select("#buttons").selectAll(".buttonGroup")
+	var buttonGroups = d3.selectAll("#buttons").selectAll(".buttonGroup")
 		.data(buttonsData).enter()
+
 		.append("span").attr("class", "buttonGroup");
 
 	buttonGroups.append("label").html(function(d){return d.name;});
@@ -293,6 +327,7 @@ function createButtons() {
 			barChartIndex = selectedIndex;
 			parameter_choice = selectedIndex;
 			update_vis_data(selectedIndex);
+			loadBarChart();
 		})
 		.selectAll("option")
 			.data(para_choices).enter()
@@ -302,6 +337,7 @@ function createButtons() {
 			
 				return color_choices[color_index++];
 			});
+
 }
 
 
@@ -349,7 +385,7 @@ function loadBarChart()
 	//console.log(barChartDate);
 	
 var margin = {top: 150, right: 20, bottom: 30, left: 70},
-    width = 960 - margin.left - margin.right,
+    width = 1100 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 //var x = d3.scale.ordinal()
@@ -380,6 +416,9 @@ svg2 = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
 	.attr("id","BARCHART")
+	.attr("class", "RdYlGn")
+	.style("display", "block")
+	.style("margin", "auto")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	barChartSetup = true;
@@ -454,7 +493,7 @@ d3.csv("All_data.csv", function(error, csv) {
 	}
 	//console.log(barChartDate);
 	//console.log(csv);
-	console.log(dataT);
+
 
 	//Cleans data
 	var list_len = dataT.length;
@@ -470,6 +509,21 @@ d3.csv("All_data.csv", function(error, csv) {
 		}
 	}
 	
+	//Cleans data according to user-set  filters
+	console.log(dataT);
+	for(i=0;i<dataT.length;i++)
+	{
+		for(j=0;j<vetoNames.length;j++)
+		{
+			if(dataT[i]["Name"] === vetoNames[j])
+			{
+				dataT.splice(i,1);
+				i--;
+				break;
+			}
+		}
+		
+	}
 	//Sorts Data
 	dataT.sort(function(a, b) {
 		return parseFloat(b[para_choices[barChartIndex]]) - parseFloat(a[para_choices[barChartIndex]]);
@@ -519,17 +573,21 @@ d3.csv("All_data.csv", function(error, csv) {
 	}
 	
 
+	
 
-	x.domain(dataT.map(function(d) { return d["Name"]}));
+	//x.domain(dataT.map(function(d) { return d["Name"]}));
+	
+
+	
 	y.domain([0, d3.max(dataT, function(d) { return maxValuesBar[barChartIndex]})]); //CHANGE
-	
-	
+
 	svg2.append("rect")
 		.attr("x", (width /2)-150)
 		.attr("y", -80)
 		.attr("width", 300)
 		.attr("height", 50)
-		.style("fill", "#4292c6");
+		.style("fill", color_choices[barChartIndex])
+
 		
 		
 	svg2.append("text")
@@ -568,22 +626,46 @@ d3.csv("All_data.csv", function(error, csv) {
 			.attr("x", width/2)
 			.style("text-anchor", "middle")
 			.text("User");
-		
+	
+	var num_bars_done = 0;
+
+	
+	for(i = 0; i<dataT.length;i++)
+	{
+		svg2.append("text")
+			.attr("x", 23+(i*50))             
+			.attr("y", 340)
+			.attr("text-anchor", "middle")  
+			.style("font-size", "10px")
+			.style("fill", "black")
+			.text(dataT[i]["Name"]);
+	}
+
+
 	svg2.selectAll(".bar")
 		.data(dataT)
     .enter().append("rect")
-      .attr("class", "bar")
-     // .attr("x",  function(d, i) {
-			// this function is called for each data element (therefore for each new <rect>)
-			// 'd' is the data element itself, 'i' is its index
-		//	return i * 25;
-		//})
-		.attr("x", function(d) { return x(d["Name"]); })
-		.attr("width", x.rangeBand())
+	
+		.attr("class", "day q0-13")
+		.attr("class", function(d) { 
+			
+			
+			return "day " + color(dataT[num_bars_done++][para_choices[barChartIndex]]); 
+	  
+	  
+			})
+		
+		.attr("x",  function(d, i) {
+			 //this function is called for each data element (therefore for each new <rect>)
+			 //'d' is the data element itself, 'i' is its index
+			return 3+(i * 50);
+		})
+		//.attr("x", function(d) { return x(d["Name"]); })
+		.attr("width", 40)
 		.attr("height", function(d) { return height - y(d[para_choices[barChartIndex]]); })
 		.attr("y", function(d) { 
 			var displacement = d3.select(this).attr("height");
-			return height-displacement;
+			return (height-displacement)-1;
 		})
 		.on('mouseover', tip.show)
 		.on('mouseout', tip.hide)
@@ -594,9 +676,7 @@ d3.csv("All_data.csv", function(error, csv) {
 
 	  
 
-	
 });
-
 
 
 
@@ -608,3 +688,121 @@ function type(d) {
 }
 
 }
+
+
+
+function build_user_menu()
+{
+	console.log("asdf");
+	var checkList = document.getElementById('list1');
+	var items = document.getElementById('items');
+        checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
+            if (items.classList.contains('visible')){
+                items.classList.remove('visible');
+                items.style.display = "none";
+
+            }
+            
+            else{
+                items.classList.add('visible');
+                items.style.display = "block";
+            }
+            
+            
+        }
+
+        items.onblur = function(evt) {
+            items.classList.remove('visible');
+        }
+
+
+		
+	
+}
+
+
+
+//GUESS I'M GOING TO DO IT THIS WAY....
+document.getElementById("user1_box").onclick = function()
+{
+	if (this.checked) {
+		console.log("hit");
+		vetoNames.splice((vetoNames.indexOf("Brandon")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("Brandon");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("Brandon");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user2_box").onclick = function()
+{
+	if (this.checked) {
+		console.log("hit");
+		vetoNames.splice((vetoNames.indexOf("User 1")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 1");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 1");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
