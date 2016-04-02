@@ -3,9 +3,9 @@ Name: Brandon Brien
 ID: 10079883
 
 TODO: 
-	- Legened for main grid (white = no data available)
-	- Count for each color. (could be month, week, year...not sure yet)
 	- Reorganize code
+	- Count for each color. (could be month, week, year...not sure yet)
+
 
 
 
@@ -14,9 +14,9 @@ TODO:
 var xScale = d3.scale.linear().range([0, width]);
 var yScale = d3.scale.linear().range([height, 0]);
 
+
 var barChartSetup = false;
 var svg2;
-
 var width = 960,
     height = 150,
     cellSize = 17, // cell size
@@ -28,14 +28,29 @@ var width = 960,
 	vetoNames = [],
 	checkBox_ids = ["user1_box", "user2_box", "user3_box", "user4_box", "user5_box", "user6_box", "user7_box", "user8_box", "user9_box", 
 					"user10_box", "user11_box", "user12_box", "user13_box", "user14_box", "user15_box", "user16_box", "user17_box", "user18_box", "user19_box", "user20_box"],
-	usernames = ["User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12", "User 13", "User 14", "User 15", 
-				"User 16", "User 17", "User 18", "User 19", "User 20"]
+	usernames = ["User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12", "User 13", "User 14", "Benny", 
+				"Allison", "Debbe", "Lester", "Carina", "Brandon"]
 	maxValuesBar = [7000, 31000, 17, 200, 1500, 800, 220, 250, 6500, 680, 250, 50, 1000],
+	maxDomains = [4143, 15000, 9.135, 36.17, 1436, 289, 124, 62, 2188, 484, 44.67, 24.00, 516],
+	index1_colors = [ ["#c6dbef", "#9ecae1" , "#6baed6","#3182bd", "#08519c"], 
+							["#c7e9c0", "#a1d99b", "#74c476", "#31a354", "#006d2c"],
+							["#c7e9c0", "#a1d99b", "#74c476", "#31a354", "#006d2c"],
+							["#feedde", "#fdbe85", "#fd8d3c", "#e6550d", "#a63603"],
+							//["#3f007d","#54278f","#6a51a3","#807dba","#9e9ac8","#bcbddc","#dadaeb"],
+							["#dadaeb","#bcbddc","#9e9ac8","#807dba","#6a51a3","#54278f","#3f007d",],
+							["#dadaeb","#bcbddc","#9e9ac8","#807dba","#6a51a3","#54278f","#3f007d",],
+							["#dadaeb","#bcbddc","#9e9ac8","#807dba","#6a51a3","#54278f","#3f007d",],
+							["#dadaeb","#bcbddc","#9e9ac8","#807dba","#6a51a3","#54278f","#3f007d",],
+							["#fee5d9","#fcae91","#fb6a4a","#de2d26","#a50f15"],
+							["#f1eef6","#d7b5d8","#df65b0","#dd1c77","#980043"],
+							["#ccece6","#99d8c9","#66c2a4","#2ca25f","#006d2c"],
+							["#d9d9d9","#cccccc","#969696","#636363","#252525"],
+							["#d9d9d9","#cccccc","#969696","#636363","#252525"]
+							],
 	color = null,
 	barChartIndex = 0,
 	barChartDate = null,
 	parameter_choice = 0;
-
 	
 // Format for the date
 var percent = d3.format(".1%"),
@@ -131,12 +146,14 @@ svg.selectAll(".month")
 // Create buttons and choics menus
 createButtons();
 build_user_menu();
+window.onload = build_legend;
 	
 // Initally start with the first option on the menu (calories burned) 
 update_vis_data(0);
 
 // Handles the parameter changes and updates the visualization and data fixing
 function update_vis_data (to_show) {
+
 d3.csv("All_data.csv", function(error, csv) {
   if (error) throw error;
 	//console.log(csv);
@@ -328,6 +345,7 @@ function createButtons() {
 			parameter_choice = selectedIndex;
 			update_vis_data(selectedIndex);
 			loadBarChart();
+			build_legend();
 		})
 		.selectAll("option")
 			.data(para_choices).enter()
@@ -510,7 +528,7 @@ d3.csv("All_data.csv", function(error, csv) {
 	}
 	
 	//Cleans data according to user-set  filters
-	console.log(dataT);
+
 	for(i=0;i<dataT.length;i++)
 	{
 		for(j=0;j<vetoNames.length;j++)
@@ -524,6 +542,7 @@ d3.csv("All_data.csv", function(error, csv) {
 		}
 		
 	}
+	console.log(dataT);
 	//Sorts Data
 	dataT.sort(function(a, b) {
 		return parseFloat(b[para_choices[barChartIndex]]) - parseFloat(a[para_choices[barChartIndex]]);
@@ -693,7 +712,7 @@ function type(d) {
 
 function build_user_menu()
 {
-	console.log("asdf");
+
 	var checkList = document.getElementById('list1');
 	var items = document.getElementById('items');
         checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
@@ -720,13 +739,591 @@ function build_user_menu()
 	
 }
 
+function build_legend()
+{
+	console.log("leg hit");
+	var max = 0;
+	var section = 0;
+	var current_num = 0;
+	var num_sections = 0;
+	if(barChartIndex != 4)
+	{		
+		if(barChartIndex < 4 || barChartIndex > 7)
+		{
+			num_sections = 5;
+		}
+		else
+		{
+			num_sections = 7;
+		}
+		
+		max = maxDomains[barChartIndex];
+		section = Math.round(max/num_sections);
+		current_num = 0;
+		
+		
+		var block = document.getElementById("leg_0");
+		block.style.background = index1_colors[barChartIndex][0];
+		block.style.opacity = 1;
+		
+		//block.innerHTML= section.toString() + " to " + (current_num+=section).toString();
+		block.innerHTML= "1" + " - " + (current_num+=section).toString();
+		
+		block = document.getElementById("leg_1");
+		block.style.background = index1_colors[barChartIndex][1];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num+1).toString() + " - " + (current_num+=section).toString();
+		
+		block = document.getElementById("leg_2");
+		block.style.background = index1_colors[barChartIndex][2];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num+1).toString() + " - " + (current_num+=section).toString();
+		
+		block = document.getElementById("leg_3");
+		block.style.background = index1_colors[barChartIndex][3];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num+1).toString() + " - " + (current_num+=section).toString();
+		
+		if(barChartIndex < 4 || barChartIndex > 7)
+		{
+		block = document.getElementById("leg_4");
+		block.style.background = index1_colors[barChartIndex][4];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num+1).toString() + " - " + max.toString();
+		
+		block = document.getElementById("leg_5");
+		block.style.opacity = 0;
+		
+		block = document.getElementById("leg_6");
+		block.style.opacity = 0;
+		
+		}
+		else
+		{
+				
+			block = document.getElementById("leg_4");
+			block.style.background = index1_colors[barChartIndex][4];
+			block.style.opacity = 1;
+			block.innerHTML= (current_num+1).toString() + " - " +  (current_num+=section).toString();
+			
+			block = document.getElementById("leg_5");
+			block.style.background = index1_colors[barChartIndex][5];
+			block.style.opacity = 1;
+			block.innerHTML= (current_num+1).toString() + " - " +  (current_num+=section).toString();
+			
+			block = document.getElementById("leg_6");
+			block.style.background = index1_colors[barChartIndex][6];
+			block.style.opacity = 1;
+			block.innerHTML= (current_num+1).toString() + " - " +  max.toString();
+		}
+
+	}
+	else{
+		//Stupid sedentary minutes
+		console.log("hiiiiiiii");
+		console.log(barChartIndex);
+		max = maxDomains[barChartIndex];
+		section = Math.round(max/7);
+		current_num = max;
+
+		var block = document.getElementById("leg_0");
+		block.style.background = index1_colors[barChartIndex][0];
+		block.style.opacity = 1;
+		block.innerHTML= max + " - " + (current_num-=section).toString();
+		
+		block = document.getElementById("leg_1");
+		block.style.background = index1_colors[barChartIndex][1];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num-1) + " - " + (current_num-=section).toString();
+		
+		block = document.getElementById("leg_2");
+		block.style.background = index1_colors[barChartIndex][2];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num-1) + " - " + (current_num-=section).toString();
+		
+		block = document.getElementById("leg_3");
+		block.style.background = index1_colors[barChartIndex][3];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num-1) + " - " + (current_num-=section).toString();
+		
+		block = document.getElementById("leg_4");
+		block.style.background = index1_colors[barChartIndex][4];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num-1) + " - " + (current_num-=section).toString();
+		
+		block = document.getElementById("leg_5");
+		block.style.background = index1_colors[barChartIndex][5];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num-1) + " - " + (current_num-=section).toString();
+		
+		block = document.getElementById("leg_6");
+		block.style.background = index1_colors[barChartIndex][6];
+		block.style.opacity = 1;
+		block.innerHTML= (current_num-1) + " - " + "0"
+		
+	}
+}
+
+
+/*
+for(x = 0;x<20;x++)
+{
+	console.log(x);
+	document.getElementById(checkBox_ids[x]).onclick = function()
+	{
+		console.log(x);
+		console.log(checkBox_ids[x]);
+		console.log(usernames[x]);
+		if (this.checked) {
+
+			vetoNames.splice((vetoNames.indexOf(usernames[x])), 1)
+		}
+		else{
+			var test = -1;
+			test = vetoNames.indexOf(usernames[x]);
+			
+			if(test == -1)
+			{	
+				vetoNames.push(usernames[x]);
+			}
+		}
+		update_vis_data(barChartIndex);
+		loadBarChart();
+	}
+
+}
+*/
 
 
 //GUESS I'M GOING TO DO IT THIS WAY....
 document.getElementById("user1_box").onclick = function()
 {
 	if (this.checked) {
-		console.log("hit");
+
+		vetoNames.splice((vetoNames.indexOf("User 1")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 1");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 1");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+	console.log(vetoNames);
+}
+
+document.getElementById("user2_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 2")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 2");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 2");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("user3_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 3")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 3");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 3");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user4_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 4")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 4");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 4");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user5_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 5")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 5");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 5");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user6_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 6")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 6");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 6");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user7_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 7")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 7");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 7");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user8_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 8")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 8");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 8");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user9_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 9")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 9");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 9");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user10_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 10")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 10");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 10");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user11_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 11")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 11");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 11");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user12_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 12")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 12");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 12");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user13_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User13")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 13");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 13");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user14_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 14")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 14");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 14");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("user15_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 15")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 15");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 15");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("user16_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 16")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 16");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 16");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("user17_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 17")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 17");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 17");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("user18_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 18")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 18");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 18");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("user19_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("User 19")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("User 19");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("User 19");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("benny_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("Benny")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("Benny");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("Benny");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+
+document.getElementById("allison_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("Allison")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("Allison");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("Allison");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("debbe_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("Debbe")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("Debbe");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("Debbe");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("lester_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("Lester")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("Lester");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("Lester");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("carina_box").onclick = function()
+{
+	if (this.checked) {
+		vetoNames.splice((vetoNames.indexOf("Carina")), 1)
+	}
+	else{
+		var test = -1;
+		test = vetoNames.indexOf("Carina");
+		
+		if(test == -1)
+		{	
+			vetoNames.push("Carina");
+		}
+	}
+	update_vis_data(barChartIndex);
+	loadBarChart();
+}
+document.getElementById("brandon_box").onclick = function()
+{
+	if (this.checked) {
 		vetoNames.splice((vetoNames.indexOf("Brandon")), 1)
 	}
 	else{
@@ -742,24 +1339,8 @@ document.getElementById("user1_box").onclick = function()
 	loadBarChart();
 }
 
-document.getElementById("user2_box").onclick = function()
-{
-	if (this.checked) {
-		console.log("hit");
-		vetoNames.splice((vetoNames.indexOf("User 1")), 1)
-	}
-	else{
-		var test = -1;
-		test = vetoNames.indexOf("User 1");
-		
-		if(test == -1)
-		{	
-			vetoNames.push("User 1");
-		}
-	}
-	update_vis_data(barChartIndex);
-	loadBarChart();
-}
+
+
 
 
 
